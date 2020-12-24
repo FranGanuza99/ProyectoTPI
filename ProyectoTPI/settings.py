@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+AUTH_USER_MODEL = "SistemaAudios.User"
 
 # Application definition
 
@@ -76,8 +79,12 @@ WSGI_APPLICATION = 'ProyectoTPI.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'audios',
+        'USER' : 'audio',
+        'PASSWORD' : 'audios123',
+        'HOST' : '127.0.0.1',
+        'DATABASE_PORT' : '5432',
     }
 }
 
@@ -119,3 +126,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'beatcloud.noreply@gmail.com'
+EMAIL_HOST_PASSWORD = 'BeatCloud123#'
