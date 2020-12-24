@@ -1,0 +1,25 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+
+  <br>
+  <h2 class="text-center">Recuperar contraseña</h2>
+  <br><br>
+  <div class="row">
+    <div class="col-md-6 col-sm-12 offset-md-3">
+        <!--<p>Debe ingresar su correo electronico y se enviará una clave provicional a su email y deberá colocarla en el login con su nombre de usuario</p> -->
+        <form class="row g-3" method="POST">
+            {% csrf_token %}
+            <label for="email" class="form-label">Correo Electrónico:</label>
+            <input type="email" class="form-control" id="email" name="email">
+            <div class="col-md-4 col-sm-12 mx-auto">
+              <a class="btn btn-danger" href="/">Cancelar</a>
+              <button type="submit" class="btn btn-success">Enviar</button>
+            </div> 
+        </form>
+    </div>          
+  </div>
+
+{% endblock %}

@@ -19,4 +19,9 @@ from SistemaAudios import views
 
 urlpatterns = [
     path('', views.home, name="Home"),
+    path('registro', views.register, name="register"),
+    path('login', views.login, name="login"),
+    path('logout/', views.logout, name="logout"),
+    path('recuperar', views.recuperar, name="recuperar"),
+    path('cambiar-contra/<clave>', views.cambiar_contra, name="cambiar_contra")
 ]

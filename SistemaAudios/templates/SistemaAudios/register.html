@@ -1,0 +1,24 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+
+  <br>
+  <div class="row">
+      <br><h2 class="text-center">Registro</h2>
+      <br><br>
+      <div class="col-md-6 col-sm-12 offset-md-3">
+          <form class="row g-3" method="POST">
+              {{ form.as_p }}
+              {% csrf_token %}
+
+              <div class="col-md-5 col-sm-12 mx-auto">
+                <a class="btn btn-danger" href="/">Cancelar</a>
+                <button type="submit" class="btn btn-success">Registrarme</button>
+              </div> 
+          </form>
+      </div>          
+    </div>
+
+{% endblock %}
