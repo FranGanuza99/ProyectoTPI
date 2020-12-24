@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'audios',
         'USER' : 'postgres', #usuario postgres (o puedes crear uno propio)
-        'PASSWORD' : 'Ganuzz99##', #contraseña de usuario postgres u otro
+        'PASSWORD' : 'abc123', #contraseña de usuario postgres u otro
         'HOST' : '127.0.0.1',
         'DATABASE_PORT' : '5432',
     }
