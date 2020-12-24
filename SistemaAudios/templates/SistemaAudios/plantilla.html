@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="{% static 'SistemaAudios/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'SistemaAudios/css/mystylesheet.css' %}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient">
     <div class="container">
-      <a class="navbar-brand" href="#">APP</a>
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'SistemaAudios/img/logo.jpg' %}" alt="" width="30" height="30" class="d-inline-block align-top">
+        BEAT CLOUD
+      </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -20,43 +24,65 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Audios</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Mis audios</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Listas
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="#">Favoritos</a></li>
-                <li><a class="dropdown-item" href="#">Ver mas tarde</a></li>
-              </ul>
-            </li>
+            {% if request.user.is_authenticated %}
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Inicio</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Audios</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Mis audios</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Listas
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">Favoritos</a></li>
+                  <li><a class="dropdown-item" href="#">Escuchar mas tarde</a></li>
+                </ul>
+              </li>
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'login' %}">Iniciar sesión</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'register' %}">Registrarse</a>
+              </li>
+            {% endif %}
           </ul>
           
           <div class="">
-            <button type="button" class="btn btn-success">Iniciar Sesión</button>
+            {% if request.user.is_authenticated %} 
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ request.user.username }}
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="{% url 'logout' %}">Cerrar sesion</a></li>
+                  </ul>
+                </li>
+              </ul>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
     </nav>
 
-    <div class="container">
+    {% csrf_token %}
+
+    <div class="container container_content">
       {% block content%}
       {% endblock %}
     </div>
 
 </body>
 
-<footer class="text-muted py-5">
-  <hr>
+<footer class="text-muted py-4">
+  <hr class="footer_line">
   <div class="container">
     <p class="mb-1">Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
     <p class="mb-0">New to Bootstrap? <a href="/">Visit the homepage</a> or read our <a href="/docs/5.0/getting-started/introduction/">getting started guide</a>.</p>
@@ -64,5 +90,16 @@
 </footer>
 
 <script src="{% static 'SistemaAudios/js/bootstrap.bundle.min.js' %}"></script>
+
+{% if messages %}
+    {% for m in messages %}
+        <script>
+            Swal.fire({
+                icon: '{{m.tags}}',
+                text: '{{m}}'
+            })
+        </script>
+    {% endfor %}
+  {% endif%}
 
 </html>
