@@ -23,5 +23,8 @@ urlpatterns = [
     path('login', views.login, name="login"),
     path('logout/', views.logout, name="logout"),
     path('recuperar', views.recuperar, name="recuperar"),
-    path('cambiar-contra/<clave>', views.cambiar_contra, name="cambiar_contra")
+    path('cambiar-contra/<clave>', views.cambiar_contra, name="cambiar_contra"),
+    path('mis_recursos/', views.UserRecursoListView.as_view(), name='mis_recursos' ),
+    path('<int:pk>/actualizar', views.RecursoUpdateView.as_view(), name='actualizar'),
+    path('<pk>/delete/', views.RecursoDeleteView.as_view(), name='eliminar')
 ]

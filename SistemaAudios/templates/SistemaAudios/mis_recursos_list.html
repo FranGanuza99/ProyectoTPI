@@ -1,0 +1,21 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}Mis recursos{% endblock %}
+
+{% block content %}
+{% if recurso_lists %}
+<div class="d-flex justify-content-center mt-4">
+    <div class="list-group align-self-center flex-grow-1 pe-5">
+        {% for recurso in recurso_lists %}
+        <a href="{% url 'actualizar' recurso.pk %}"
+            class="list-group-item list-group-item-action">
+            {{ recurso.nombre }}&nbsp;&nbsp;&nbsp;&nbsp;{{ recurso.descripcion }}
+            &nbsp;&nbsp;&nbsp;&nbsp;{{ recurso.categoria  }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p class='paragraph'> No ten&eacute;s recursos a&uacute;n.</p>
+{% endif %}
+{% endblock %}
