@@ -1,0 +1,12 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}Eliminar recurso{% endblock %}
+
+{% block content %}
+<a href="{% url 'mis_recursos' %}" class="btn btn-link my-2 ps-0">Regresar</a>
+<form  method="post" class="form">
+    {% csrf_token %}
+    <p>Est&aacute; seguro que desea eliminar {{ object }}?</p>
+    <input type="submit" class="btn btn-secondary" value="Confirmar">
+</form>
+{% endblock %}

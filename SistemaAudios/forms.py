@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from .models import User
+from .models import User, Recurso
 from django.contrib.auth.forms import UserCreationForm  
 from django import forms
 
@@ -18,3 +18,21 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ['first_name', 'last_name', 'username','email', 'password1', 'password2']
         help_texts = {k:"" for k in fields}
+
+
+class RecursoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(RecursoForm, self).__init__(*args, **kwargs)
+        
+        # Agrega un atributo class con el mismo valor
+        # a todos los campos del formulario.
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+    
+    class Meta:
+        model = Recurso
+        fields = [
+            'nombre',
+            'descripcion',
+            'archivo',
+            'categoria']

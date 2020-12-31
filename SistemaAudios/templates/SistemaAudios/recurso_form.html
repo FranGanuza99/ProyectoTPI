@@ -1,0 +1,24 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}Recurso{% endblock %}
+
+{% block content %}
+<a href="{% url 'mis_recursos' %}" class="btn btn-link my-1 ps-0">Regresar</a>
+<br>
+<form  method="post" class="my-2 pe-5" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="row mb-3">
+        <label for="{{ field.id_for_label }}"
+                    class="col-sm-2 col-form-label">{{ field.label }}</label>
+        <div class="col-sm-10">
+            {{ field }}
+        </div>
+    </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-secondary" value="Hecho">
+    {% if object%}
+    <a class="btn btn-link mx-2" href="{% url 'eliminar' recurso.pk%}">Eliminar</a>
+    {% endif %}
+</form>
+{% endblock %}

@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db import connection
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.views import generic
 
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -12,7 +13,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-from .forms import UserRegisterForm  
+from .forms import UserRegisterForm, RecursoForm
 from .models import Categoria, Recurso, Lista, DetalleLista, User
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -137,3 +138,43 @@ def cambiar_contra(request, clave):
         #id no escrito
         return redirect('../')
     return render(request, "SistemaAudios/cambiar-contraseña.html")
+
+
+class UserRecursoListView(generic.ListView):
+    model = Recurso
+    template_name = 'SistemaAudios/mis_recursos_list.html'
+    context_object_name = 'recurso_lists'
+    
+    def get_queryset(self):
+        return Recurso.objects.filter(usuario=self.request.user)
+
+
+class RecursoUpdateView(generic.edit.UpdateView):
+     model = Recurso
+     form_class = RecursoForm
+     success_url = '/mis_recursos/'
+     context_object_name = 'recurso'
+    
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         context['object']=self.object
+        
+         return context
+
+
+class RecursoDeleteView(generic.edit.DeleteView):
+    model = Recurso
+    success_url = '/mis_recursos/'
+
+
+class RecursoCreateView(generic.edit.CreateView):
+    model = Recurso
+    form_class = RecursoForm
+    success_url = '/mis_recursos/'
+#    context_object_name = 'recurso'
+    
+    def form_valid(self, form):
+        form.instance.usuario = self.request.user
+        
+        return super(RecursoCreateView, self).form_valid(form)
+

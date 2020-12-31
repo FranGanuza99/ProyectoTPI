@@ -15,9 +15,12 @@ class Recurso(models.Model):
     idRecurso = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=16)
     descripcion = models.CharField(max_length=56)
-    archivo = models.CharField(max_length=150)
+    archivo = models.FileField(upload_to='audios/')
     categoria = models.ForeignKey(Categoria, null = True, blank = True, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, null = True, blank = True, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre
 
 class Lista(models.Model):
     idLista = models.AutoField(primary_key=True)
