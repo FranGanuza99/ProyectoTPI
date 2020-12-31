@@ -26,5 +26,6 @@ urlpatterns = [
     path('cambiar-contra/<clave>', views.cambiar_contra, name="cambiar_contra"),
     path('mis_recursos/', views.UserRecursoListView.as_view(), name='mis_recursos' ),
     path('<int:pk>/actualizar', views.RecursoUpdateView.as_view(), name='actualizar'),
-    path('<pk>/delete/', views.RecursoDeleteView.as_view(), name='eliminar')
+    path('<pk>/delete/', views.RecursoDeleteView.as_view(), name='eliminar'),
+    path('crear/', views.RecursoCreateView.as_view(), name='crear')
 ]

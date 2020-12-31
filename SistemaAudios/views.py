@@ -154,9 +154,27 @@ class RecursoUpdateView(generic.edit.UpdateView):
      form_class = RecursoForm
      success_url = '/mis_recursos/'
      context_object_name = 'recurso'
+    
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         context['object']=self.object
+        
+         return context
 
 
 class RecursoDeleteView(generic.edit.DeleteView):
     model = Recurso
     success_url = '/mis_recursos/'
+
+
+class RecursoCreateView(generic.edit.CreateView):
+    model = Recurso
+    form_class = RecursoForm
+    success_url = '/mis_recursos/'
+#    context_object_name = 'recurso'
+    
+    def form_valid(self, form):
+        form.instance.usuario = self.request.user
+        
+        return super(RecursoCreateView, self).form_valid(form)
 

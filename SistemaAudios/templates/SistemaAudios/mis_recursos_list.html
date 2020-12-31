@@ -3,6 +3,7 @@
 {% block title %}Mis recursos{% endblock %}
 
 {% block content %}
+<h1 class="display-6 pt-1"> Mis recursos</h1>
 {% if recurso_lists %}
 <div class="d-flex justify-content-center mt-4">
     <div class="list-group align-self-center flex-grow-1 pe-5">
@@ -15,7 +16,8 @@
         {% endfor %}
     </div>
 </div>
+<a href="{% url 'crear' %}" class="btn btn-link mx-2">Nuevo recurso</a>
 {% else %}
-<p class='paragraph'> No ten&eacute;s recursos a&uacute;n.</p>
+<p class="display-6""> No tiene recursos a&uacute;n.</p>
 {% endif %}
 {% endblock %}
