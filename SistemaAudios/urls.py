@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls import path
 
 from SistemaAudios import views
+from django.conf.urls import url
+from SistemaAudios.ajax import add_fav, add_sl, del_fav, del_sl, fav, sl, remove
 
 urlpatterns = [
     path('', views.home, name="Home"),
@@ -24,8 +26,16 @@ urlpatterns = [
     path('logout/', views.logout, name="logout"),
     path('recuperar', views.recuperar, name="recuperar"),
     path('cambiar-contra/<clave>', views.cambiar_contra, name="cambiar_contra"),
-    path('mis_recursos/', views.UserRecursoListView.as_view(), name='mis_recursos' ),
+    path('mis_recursos/', views.UserRecursoListView, name='mis_recursos' ),
     path('<int:pk>/actualizar', views.RecursoUpdateView.as_view(), name='actualizar'),
     path('<pk>/delete/', views.RecursoDeleteView.as_view(), name='eliminar'),
-    path('crear/', views.RecursoCreateView.as_view(), name='crear')
+    path('crear/', views.RecursoCreateView.as_view(), name='crear'),
+    url(r'ajax/add_fav', add_fav, name='add_fav'),
+    url(r'ajax/add_sl', add_sl, name='add_sl'),
+    url(r'ajax/del_fav', del_fav, name='del_fav'),
+    url(r'ajax/del_sl', del_sl, name='del_sl'),
+    url(r'ajax/fav', fav, name='fav'),
+    url(r'ajax/sl', sl, name='sl'),
+    path('ver_lista/<int:tipo>', views.ver_lista, name="ver_lista"),
+    url(r'ajax/remove', remove, name='remove'),
 ]

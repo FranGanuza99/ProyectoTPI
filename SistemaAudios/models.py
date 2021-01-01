@@ -11,6 +11,9 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=16)
     descripcion = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.nombre
+
 class Recurso(models.Model):
     idRecurso = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=16)

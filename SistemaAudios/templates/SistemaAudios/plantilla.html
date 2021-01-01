@@ -7,9 +7,11 @@
     <link href="{% static 'SistemaAudios/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'SistemaAudios/css/mystylesheet.css' %}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.5.1.min.js"></script> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body>
+<body onload="cargar()">
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-gradient">
     <div class="container">
       <a class="navbar-brand" href="/">
@@ -39,8 +41,8 @@
                   Listas
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Favoritos</a></li>
-                  <li><a class="dropdown-item" href="#">Escuchar mas tarde</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ver_lista' 1 %}">Favoritos</a></li>
+                  <li><a class="dropdown-item" href="{% url 'ver_lista' 2 %}">Escuchar mas tarde</a></li>
                 </ul>
               </li>
             {% else %}
