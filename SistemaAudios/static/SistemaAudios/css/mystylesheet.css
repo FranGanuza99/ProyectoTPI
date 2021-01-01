@@ -24,3 +24,12 @@ footer {
     margin-top: 0;
 }
 
+.opt {
+    margin-right: 5px;
+}
+
+.bar{
+    margin-left: 10px;
+    margin-right: 10px;
+    color: gray;
+}

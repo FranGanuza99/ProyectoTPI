@@ -1,0 +1,71 @@
+{% extends 'SistemaAudios/plantilla.html' %}
+
+{% block title %}
+{% if tipo == False %}
+Favoritos
+{% else %}
+Escuchar más tarde
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if tipo == False %}
+<h2 class="text-center pt-3">Favoritos</h2>
+{% else %}
+<h2 class="text-center pt-3">Escuchar más tarde</h2>
+{% endif %}
+
+{% if lista %}
+<div class="d-flex justify-content-center mt-4">
+    <div class="list-group align-self-center flex-grow-1 pe-5">
+        
+        {% for detalle in lista %}
+                
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ detalle.recurso.nombre}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ detalle.recurso.categoria.nombre  }}</h6>
+                    <p class="card-text">{{ detalle.recurso.descripcion }}</p>
+                    <audio src="../../../media/{{ detalle.recurso.archivo }}" controls loop></audio>
+                    <br>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        {% if detalle.recurso.usuario.id == request.user.id %}
+                            <a class="" href="{% url 'actualizar' detalle.recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
+                            <a class="" title="Eliminar recurso" href="{% url 'eliminar' detalle.recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
+                        {% endif%}
+                        
+                        <a class="" href="" onclick="remove({{ detalle.pk }})" class="card-link"><i class="material-icons">remove_circle_outline</i></a>
+                    </div>           
+                </div>
+            </div>
+            <br>
+        {% endfor %}
+        
+    </div>
+</div>
+{% else %}
+<p class="display-6"> No tiene recursos a&uacute;n en esta lista.</p>
+{% endif %}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    function remove(id_d) {
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'remove' %}",  
+            data: {
+                "id": id_d,
+            }
+        });
+        request.done(function (response) {
+            //$("#Fav_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+</script>
+{% endblock %}

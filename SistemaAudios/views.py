@@ -55,6 +55,10 @@ def login(request):
             if user is not None:
                 do_login(request, user)
 
+                usuario = User.objects.get(email=user.email)
+                usuario.codigoSeguridad = None
+                usuario.save()
+
                 #Obtiene las listas y las crea en caso de no estar creadas
                 listas = Lista.objects.filter(usuario=user)
                 if listas:
@@ -96,7 +100,7 @@ def recuperar(request):
                 
                 subject="Recuperación de contraseña"
                 HOSTNAME = request.META['HTTP_HOST']
-                message="Su clave de seguridad es: " + codigo + " debe copiar y pegar el la siguiente dirección para modificarla: http://" + HOSTNAME + "/cambiar-contra/" + codigo
+                message="Su clave de seguridad es: " + codigo + " debe copiar y pegar en el navegador la siguiente dirección para modificarla: http://" + HOSTNAME + "/cambiar-contra/" + codigo
                 email_from=settings.EMAIL_HOST_USER
                 recipient_list=[email]
                 send_mail(subject, message, email_from, recipient_list)
@@ -123,7 +127,7 @@ def cambiar_contra(request, clave):
                 print(pass2)
                 if pass1 == pass2:
                     usuario.set_password(pass1)
-                    usuario.codigoSeguridad = ""
+                    usuario.codigoSeguridad = None
                     usuario.save()
                     messages.success(request, "Contraseña actualizada")
 
@@ -140,13 +144,20 @@ def cambiar_contra(request, clave):
     return render(request, "SistemaAudios/cambiar-contraseña.html")
 
 
-class UserRecursoListView(generic.ListView):
-    model = Recurso
-    template_name = 'SistemaAudios/mis_recursos_list.html'
-    context_object_name = 'recurso_lists'
-    
-    def get_queryset(self):
-        return Recurso.objects.filter(usuario=self.request.user)
+def UserRecursoListView(request):
+    recursos = Recurso.objects.filter(usuario=request.user)
+    ListaFav = Lista.objects.get(usuario=request.user, tipo=False)
+    ListaSl = Lista.objects.get(usuario=request.user, tipo=True)
+    DetalleListaFav = DetalleLista.objects.filter(lista=ListaFav)
+    DetalleListaSl = DetalleLista.objects.filter(lista=ListaSl)
+
+    context = {
+        'recurso_lists':recursos,
+        'detalle_fav':DetalleListaFav,
+        'detalle_sl':DetalleListaSl
+    }
+
+    return render(request, "SistemaAudios/mis_recursos_list.html", context=context)
 
 
 class RecursoUpdateView(generic.edit.UpdateView):
@@ -177,4 +188,23 @@ class RecursoCreateView(generic.edit.CreateView):
         form.instance.usuario = self.request.user
         
         return super(RecursoCreateView, self).form_valid(form)
+
+def ver_lista(request, tipo):
+    
+    if tipo == 1:
+        tipo = False
+    else: 
+        if tipo == 2:
+            tipo = True
+        else :
+            return redirect('../')
+    ListaUsuario = Lista.objects.get(usuario=request.user, tipo=tipo)
+    DetalleListaUsuario = DetalleLista.objects.filter(lista=ListaUsuario)
+
+    context = {
+        'lista':DetalleListaUsuario,
+        'tipo':tipo
+    }
+
+    return render(request, "SistemaAudios/ver_lista.html", context=context)
 

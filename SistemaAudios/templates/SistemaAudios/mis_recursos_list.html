@@ -7,17 +7,143 @@
 {% if recurso_lists %}
 <div class="d-flex justify-content-center mt-4">
     <div class="list-group align-self-center flex-grow-1 pe-5">
-        {% for recurso in recurso_lists %}
-        <a href="{% url 'actualizar' recurso.pk %}"
-            class="list-group-item list-group-item-action">
-            {{ recurso.nombre }}&nbsp;&nbsp;&nbsp;&nbsp;{{ recurso.descripcion }}
-            &nbsp;&nbsp;&nbsp;&nbsp;{{ recurso.categoria  }}
-        </a>
-        {% endfor %}
+        <div class="row">
+            {% for recurso in recurso_lists %}
+            <div class="col-lg-4 col-sm-12">        
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recurso.nombre }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ recurso.categoria.nombre  }}</h6>
+                        <p class="card-text">{{ recurso.descripcion }}</p>
+                        <audio src="../../../media/{{ recurso.archivo }}" controls loop></audio>
+                        <br>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a class="" title="Editar recurso" href="{% url 'actualizar' recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
+                            <a class="" title="Eliminar recurso" href="{% url 'eliminar' recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
+                            <p class="bar"> |</p> 
+                            <div class="opt" id="Fav_{{ recurso.pk }}"></div>
+                            <div class="opt" id="Sl_{{ recurso.pk }}"></div>
+                        </div>           
+                    </div>
+                </div>
+                <br>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 <a href="{% url 'crear' %}" class="btn btn-link mx-2">Nuevo recurso</a>
 {% else %}
 <p class="display-6""> No tiene recursos a&uacute;n.</p>
 {% endif %}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    function cargar(){
+        {% if recurso_lists %}
+            {% for recurso in recurso_lists %}
+                fav({{ recurso.pk }});
+                sl({{ recurso.pk }});
+            {% endfor %}
+        {% else %}
+
+        {% endif %}
+        return false;
+    }
+
+    function fav(id_r) {
+        $("#Fav_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'fav' %}",  
+            data: {
+                "id": id_r,
+            }
+        });
+        request.done(function (response) {
+            $("#Fav_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+    function sl(id_r) {
+        $("#Sl_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'sl' %}", 
+            data: {
+                "id": id_r,
+            }
+        });
+        request.done(function (response) {
+            $("#Sl_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+    function addFav(id_r) {
+        $("#Fav_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'add_fav' %}",  
+            data: {
+                "id": id_r,
+            }
+        });
+        request.done(function (response) {
+            $("#Fav_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+    function addSl(id_r) {
+        $("#Sl_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'add_sl' %}", 
+            data: {
+                "id": id_r,
+            },
+        });
+        request.done(function (response) {
+            $("#Sl_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+    function delFav(id_r) {
+        $("#Fav_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'del_fav' %}", 
+            data: {
+                "id": id_r,
+            },
+        });
+        request.done(function (response) {
+            $("#Fav_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+    function delSl(id_r) {
+        $("#Sl_"+id_r).html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'del_sl' %}",  
+            data: {
+                "id": id_r,
+            },
+        });
+        request.done(function (response) {
+            $("#Sl_"+id_r).html(response.boton);
+        });
+        return false;
+    }
+
+</script>
 {% endblock %}
