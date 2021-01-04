@@ -22,6 +22,7 @@
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="" title="Editar recurso" href="{% url 'actualizar' recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
                             <a class="" title="Eliminar recurso" href="{% url 'eliminar' recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
+                            <a class="" title="Descargar recurso" href="../../../media/{{ recurso.archivo }}" download="{{ recurso.nombre }}" class="card-link"><i class="material-icons">download</i></a>
                             <p class="bar"> |</p> 
                             <div class="opt" id="Fav_{{ recurso.pk }}"></div>
                             <div class="opt" id="Sl_{{ recurso.pk }}"></div>
