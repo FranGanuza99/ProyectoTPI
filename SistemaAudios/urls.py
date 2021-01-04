@@ -17,7 +17,7 @@ from django.urls import path
 
 from SistemaAudios import views
 from django.conf.urls import url
-from SistemaAudios.ajax import add_fav, add_sl, del_fav, del_sl, fav, sl, remove
+from SistemaAudios.ajax import add_fav, add_sl, del_fav, del_sl, fav, sl, remove, busquedaFiltro
 
 urlpatterns = [
     path('', views.home, name="Home"),
@@ -38,4 +38,6 @@ urlpatterns = [
     url(r'ajax/sl', sl, name='sl'),
     path('ver_lista/<int:tipo>', views.ver_lista, name="ver_lista"),
     url(r'ajax/remove', remove, name='remove'),
+    path('busqueda/', views.busqueda, name="busqueda"),
+    url(r'ajax/busquedaFiltro', busquedaFiltro, name='busquedaFiltro')
 ]
