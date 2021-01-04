@@ -1,60 +1,66 @@
 {% extends 'SistemaAudios/plantilla.html' %}
 
-{% block title %}Mis recursos{% endblock %}
+{% block title %}Busqueda{% endblock %}
 
 {% block content %}
-<h2 class="text-center pt-3">Mis recursos</h2>
 
-
-{% if recurso_lists %}
-<div class="d-flex justify-content-center mt-4">
-    <div class="list-group align-self-center flex-grow-1 pe-5">
-        <div class="row">
-            {% for recurso in recurso_lists %}
-            <div class="col-lg-6 col-sm-12">        
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ recurso.nombre }} - {{ recurso.usuario.first_name }} {{ recurso.usuario.last_name }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ recurso.categoria.nombre  }}</h6>
-                        <p class="card-text">{{ recurso.descripcion }}</p>
-                        <audio src="../../../media/{{ recurso.archivo }}" controls loop></audio>
-                        <br>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a class="" title="Editar recurso" href="{% url 'actualizar' recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
-                            <a class="" title="Eliminar recurso" href="{% url 'eliminar' recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
-                            <p class="bar"> |</p> 
-                            <div class="opt" id="Fav_{{ recurso.pk }}"></div>
-                            <div class="opt" id="Sl_{{ recurso.pk }}"></div>
-                        </div>           
-                    </div>
-                </div>
-                <br>
-            </div>
-            {% endfor %}
+<br><h2 class="text-center pt-3">Realizar una Búsqueda</h2>
+<br>
+<form>
+    <div class="row">
+        <div class="col-lg-3 offset-md-3">
+            <label for="busqueda" class="form-label">Nombre del recurso o autor</label>
+            <input type="text" class="form-control" id="busqueda" >
+        </div>
+        <div class="col-lg-3">
+            <label for="categoria" class="form-label">Categoria</label>
+            <select  id="categoria" class="form-select" aria-label="Default select example">
+                <option selected value="0">Todas</option>
+                {% for categoria in categorias %}
+                    <option value="{{ categoria.pk }}">{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-lg-3">
+            <br>
+            <a onclick="buscar()" class="btn btn-primary"><i class="material-icons">search</i></a>
         </div>
     </div>
+</form>
+
+
+<div class="d-flex justify-content-center mt-4">
+    <div class="list-group align-self-center flex-grow-1 pe-5">
+        <div id="tabla"></div>    
+    </div>
 </div>
-{% else %}
-<p class="display-6""> No tiene recursos a&uacute;n.</p>
-{% endif %}
-<div class="stiky offset-md-11 offset-sm-10 nuevo">
-    <a href="{% url 'crear' %}" title="Agregar nuevo recurso" class="btn btn-primary btn-circle mx-2"><i class="material-icons">add</i></a>
-</div>
+
+
 <script type="text/javascript">
 
     $(document).ready(function () {
-
+        buscar();
     });
 
-    function cargar(){
-        {% if recurso_lists %}
-            {% for recurso in recurso_lists %}
-                fav({{ recurso.pk }});
-                sl({{ recurso.pk }});
-            {% endfor %}
-        {% else %}
+    function buscar(){
+        var valorBusqueda = document.getElementById("busqueda").value;
+        var categoria = document.getElementById("categoria");
+        var indexCategoria = categoria.selectedIndex;
+        var opcionSeleccionada = categoria.options[indexCategoria];
+        var categoriaSeleccionada = opcionSeleccionada.value;
 
-        {% endif %}
+        $("#tabla").html("");
+        var request = $.ajax({
+            type: "GET",
+            url: "{% url 'busquedaFiltro' %}",  
+            data: {
+                "valor": valorBusqueda,
+                "categoria":categoriaSeleccionada,
+            }
+        });
+        request.done(function (response) {
+            $("#tabla").html(response.respuesta);
+        });
         return false;
     }
 

@@ -28,10 +28,10 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link active" href="#">Inicio</a>
+                <a class="nav-link active" href="/">Inicio</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Audios</a>
+                <a class="nav-link" href="{% url 'busqueda' %}">Audios</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'mis_recursos' %}">Mis audios</a>

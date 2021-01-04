@@ -23,7 +23,7 @@ Escuchar más tarde
                 
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ detalle.recurso.nombre}}</h5>
+                    <h5 class="card-title">{{ detalle.recurso.nombre}} - {{ detalle.recurso.usuario.first_name }} {{ detalle.recurso.usuario.last_name }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ detalle.recurso.categoria.nombre  }}</h6>
                     <p class="card-text">{{ detalle.recurso.descripcion }}</p>
                     <audio src="../../../media/{{ detalle.recurso.archivo }}" controls loop></audio>
@@ -32,6 +32,7 @@ Escuchar más tarde
                         {% if detalle.recurso.usuario.id == request.user.id %}
                             <a class="" href="{% url 'actualizar' detalle.recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
                             <a class="" title="Eliminar recurso" href="{% url 'eliminar' detalle.recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
+                            <p class="bar"> |</p> 
                         {% endif%}
                         
                         <a class="" href="" onclick="remove({{ detalle.pk }})" class="card-link"><i class="material-icons">remove_circle_outline</i></a>

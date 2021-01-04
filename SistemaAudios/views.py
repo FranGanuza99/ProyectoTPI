@@ -208,3 +208,11 @@ def ver_lista(request, tipo):
 
     return render(request, "SistemaAudios/ver_lista.html", context=context)
 
+def busqueda(request):
+
+    categorias = Categoria.objects.filter()
+
+    context = {
+        'categorias':categorias
+    }
+    return render(request, "SistemaAudios/busqueda.html", context=context)

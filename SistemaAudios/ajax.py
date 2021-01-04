@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 
-from .models import Recurso, Lista, DetalleLista
+from .models import Recurso, Lista, DetalleLista, Categoria
+from django.db.models import Q
 
 def add_fav(request):
     recurso_id = request.GET.get('id')
@@ -98,3 +99,61 @@ def remove(request):
     response['respuesta'] = "200"
     return JsonResponse(response)
 
+def busquedaFiltro(request):
+    busqueda = request.GET.get('valor')
+    categoria_id = request.GET.get('categoria')
+
+    if categoria_id == "0" and not busqueda :
+        recursos = Recurso.objects.filter()
+    elif categoria_id == "0" and busqueda:
+        recursos = Recurso.objects.filter(
+                Q(nombre__contains=busqueda) | Q(usuario__first_name__contains=busqueda)
+            )
+    elif categoria_id != "0" and not busqueda:
+        categoria = Categoria.objects.get(pk=categoria_id)
+        recursos = Recurso.objects.filter(categoria=categoria)
+    elif categoria_id != "0" and busqueda:        
+        categoria = Categoria.objects.get(pk=categoria_id)
+        recursos = Recurso.objects.filter(
+                Q(nombre__contains=busqueda) | Q(usuario__first_name__contains=busqueda),
+                categoria=categoria
+            )
+    
+    tabla=''
+
+    if recursos :
+        for recurso in recursos :
+            tabla += ''' <div class="card"><div class="card-body">
+                <h5 class="card-title">%s - %s %s</h5>
+                <h6 class="card-subtitle mb-2 text-muted">%s</h6>
+                <p class="card-text">%s</p>
+                <audio src="../../../media/%s" controls loop></audio>
+                <br>
+                <div class="btn-group" role="group" aria-label="Basic example"> ''' % (recurso.nombre, recurso.usuario.first_name, recurso.usuario.last_name, recurso.categoria.nombre, recurso.descripcion, recurso.archivo)
+
+            if recurso.usuario.id == request.user.id:
+                tabla += ''' <a class="" href="/%s/actualizar" class="card-link"><i class="material-icons">edit</i></a>
+                <a class="" title="Eliminar recurso" href="/%s/delete" class="card-link"><i class="material-icons">delete</i></a>
+                <p class="bar"> |</p> ''' % (recurso.pk, recurso.pk)
+            
+            listafav = Lista.objects.get(usuario_id=request.user.id, tipo=False)   
+            elemento = DetalleLista.objects.filter(lista=listafav, recurso=recurso)  
+            if elemento :
+                tabla += '<div id="Fav_%s"><a href="" title="Quitar de favoritos" onclick="return delFav(%s)" class="card-link"><i class="material-icons">favorite</i></a></div>' % (recurso.pk, recurso.pk)
+            else :
+                tabla += '<div id="Fav_%s"><a href="" title="Agregar a favoritos" onclick="return addFav(%s)" class="card-link"><i class="material-icons">favorite_border</i></a></div>' % (recurso.pk, recurso.pk)
+
+            listasl = Lista.objects.get(usuario_id=request.user.id, tipo=True)   
+            elemento = DetalleLista.objects.filter(lista=listasl, recurso=recurso)
+            if elemento :
+                tabla += '<div id="Sl_%s"><a href="" title="Quitar de escuchar más tarde" onclick="return delSl(%s)" class="card-link" ><i class="material-icons">watch_later</i></a></div>' % (recurso.pk, recurso.pk)
+            else :
+                tabla += '<div id="Sl_%s"><a href="" title="Agregar a escuchar más tarde" onclick="return addSl(%s)" class="card-link"><i class="material-icons">query_builder</i></a></div>' % (recurso.pk, recurso.pk)
+        
+            tabla += "</div></div></div><br>"
+    else :
+        tabla = '<p class="display-6"">No se encontraron recursos</p>'
+
+    response = {}
+    response['respuesta'] = tabla
+    return JsonResponse(response)
