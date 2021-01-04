@@ -30,12 +30,13 @@ Escuchar más tarde
                     <br>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         {% if detalle.recurso.usuario.id == request.user.id %}
-                            <a class="" href="{% url 'actualizar' detalle.recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
+                            <a class="" title="Editar recurso" href="{% url 'actualizar' detalle.recurso.pk %}" class="card-link"><i class="material-icons">edit</i></a>
                             <a class="" title="Eliminar recurso" href="{% url 'eliminar' detalle.recurso.pk%}" class="card-link"><i class="material-icons">delete</i></a>
+                            <a class="" title="Descargar recurso" href="../../../media/{{ detalle.recurso.archivo }}" download="{{ detalle.recurso.nombre }}" class="card-link"><i class="material-icons">download</i></a>
                             <p class="bar"> |</p> 
                         {% endif%}
                         
-                        <a class="" href="" onclick="remove({{ detalle.pk }})" class="card-link"><i class="material-icons">remove_circle_outline</i></a>
+                        <a class="" href="" title="Quitar de esta lista" onclick="remove({{ detalle.pk }})" class="card-link"><i class="material-icons">remove_circle_outline</i></a>
                     </div>           
                 </div>
             </div>

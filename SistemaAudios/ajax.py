@@ -132,10 +132,11 @@ def busquedaFiltro(request):
                 <div class="btn-group" role="group" aria-label="Basic example"> ''' % (recurso.nombre, recurso.usuario.first_name, recurso.usuario.last_name, recurso.categoria.nombre, recurso.descripcion, recurso.archivo)
 
             if recurso.usuario.id == request.user.id:
-                tabla += ''' <a class="" href="/%s/actualizar" class="card-link"><i class="material-icons">edit</i></a>
-                <a class="" title="Eliminar recurso" href="/%s/delete" class="card-link"><i class="material-icons">delete</i></a>
-                <p class="bar"> |</p> ''' % (recurso.pk, recurso.pk)
+                tabla += ''' <a class="" title="Editar recurso" href="/%s/actualizar" class="card-link"><i class="material-icons">edit</i></a>
+                <a class="" title="Eliminar recurso" href="/%s/delete" class="card-link"><i class="material-icons">delete</i></a> ''' % (recurso.pk, recurso.pk)
             
+            tabla += '<a class="" title="Descargar recurso" href="../../../media/%s" download="%s" class="card-link"><i class="material-icons">download</i></a><p class="bar"> |</p>' % (recurso.archivo, recurso.nombre)
+
             listafav = Lista.objects.get(usuario_id=request.user.id, tipo=False)   
             elemento = DetalleLista.objects.filter(lista=listafav, recurso=recurso)  
             if elemento :
