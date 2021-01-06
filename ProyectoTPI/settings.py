@@ -9,6 +9,9 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
+
+import django_heroku
 
 from pathlib import Path
 
@@ -25,7 +28,7 @@ SECRET_KEY = 'r508#k@)jn*x4&%$=os@-zrx!k+f+8%)j^k7&n2=@3&(!b+&3w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
@@ -43,14 +46,16 @@ INSTALLED_APPS = [
     'SistemaAudios',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [   
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'ProyectoTPI.urls'
@@ -82,9 +87,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'audios',
         'USER' : 'postgres', #usuario postgres (o puedes crear uno propio)
-        'PASSWORD' : 'abc123', #contraseña de usuario postgres u otro
-        'HOST' : '127.0.0.1',
-        'DATABASE_PORT' : '5432',
+        'PASSWORD' : 'administrador', #contraseña de usuario postgres u otro
+        'HOST' : 'localhost',
+        'PORT' : 5433,
     }
 }
 
@@ -121,11 +126,16 @@ USE_L10N = True
 
 USE_TZ = True
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -134,6 +144,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'beatcloud.noreply@gmail.com'
 EMAIL_HOST_PASSWORD = 'BeatCloud123#'
 
-MEDIA_ROOT = BASE_DIR.joinpath('media')
+MEDIA_ROOT = 'media'
 
 MEDIA_URL = '/media/'
+
+django_heroku.settings(locals())

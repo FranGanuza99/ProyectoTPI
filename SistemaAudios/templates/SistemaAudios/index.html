@@ -5,24 +5,28 @@
 {% block content %}
 
   <br>
-  <h2 class="text-center">Bienvenidos</h2>
+  <!-- ><h2 class="text-center">Bienvenidos</h2><!-->
+  <div class="alert alert-success" role="alert">
+    <h3 class="alert-heading text-center font-weight-bold">BIENVENIDOS</h4>
+    <p id="parrafo" class="text-center font-weight-bold">Somos la mejor alternativa para la descarga de tus archivos de audio.</p>
+  </div>
   <br><br>
   <div class="row">
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h3 class="card-title">Amplia variedad de archivos de audio</h5>
+          <p id="parra" class="card-text">Empieza a descargar desde el primer instante de forma gratuita. Solo debes registrarte</p>
+          <a href="{% url 'register' %}" class="btn btn-primary">Registrarme</a>
         </div>
       </div>
     </div>
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Special title treatment</h5>
-          <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h3 class="card-title">Somos los mejores</h5>
+          <p id="parra" class="card-text">Un mundo por explorar en BEAT CLOUD. Podras ver una previsualizacion de tus archivos y descargarlos</p>
+          <a href="{% url 'login' %}" class="btn btn-primary">Iniciar sesion</a>
         </div>
       </div>
     </div>
